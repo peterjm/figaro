@@ -4,6 +4,7 @@ require "figaro/env"
 module Figaro
   extend self
 
+  attr_writer :path, :environment
   attr_writer :backend, :application
 
   def env
@@ -15,7 +16,7 @@ module Figaro
   end
 
   def application
-    @application ||= backend.new
+    @application ||= backend.new(path: @path, environment: @environment)
   end
 
   def load

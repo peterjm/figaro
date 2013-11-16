@@ -4,20 +4,7 @@ require "tempfile"
 
 module Figaro
   describe Application do
-    before do
-      Application.any_instance.stub(
-        default_path: "/path/to/app/config/application.yml",
-        default_environment: "development"
-      )
-    end
-
     describe "#path" do
-      it "uses the default" do
-        application = Application.new
-
-        expect(application.path).to eq("/path/to/app/config/application.yml")
-      end
-
       it "is configurable via initialization" do
         application = Application.new(path: "/app/env.yml")
 
@@ -37,25 +24,9 @@ module Figaro
         expect(application.path).to eq("/app/env.yml")
         expect(application.environment).not_to be_a(Pathname)
       end
-
-      it "follows a changing default" do
-        application = Application.new
-
-        expect {
-          application.stub(default_path: "/app/env.yml")
-        }.to change {
-          application.path
-        }.from("/path/to/app/config/application.yml").to("/app/env.yml")
-      end
     end
 
     describe "#environment" do
-      it "uses the default" do
-        application = Application.new
-
-        expect(application.environment).to eq("development")
-      end
-
       it "is configurable via initialization" do
         application = Application.new(environment: "test")
 
@@ -77,16 +48,6 @@ module Figaro
 
         expect(application.environment).to eq("test")
         expect(application.environment).not_to be_an(NotString)
-      end
-
-      it "follows a changing default" do
-        application = Application.new
-
-        expect {
-          application.stub(default_environment: "test")
-        }.to change {
-          application.environment
-        }.from("development").to("test")
       end
     end
 
@@ -154,35 +115,6 @@ foo: <%= "bar".upcase %>
 YAML
 
         expect(application.configuration).to eq("foo" => "BAR")
-      end
-
-      it "follows a changing default path" do
-        path_1 = yaml_to_path("foo: bar")
-        path_2 = yaml_to_path("foo: baz")
-
-        application = Application.new
-        application.stub(default_path: path_1)
-
-        expect {
-          application.stub(default_path: path_2)
-        }.to change {
-          application.configuration
-        }.from("foo" => "bar").to("foo" => "baz")
-      end
-
-      it "follows a changing default environment" do
-        application = Application.new(path: yaml_to_path(<<-YAML))
-foo: bar
-test:
-  foo: baz
-YAML
-        application.stub(default_environment: "development")
-
-        expect {
-          application.stub(default_environment: "test")
-        }.to change {
-          application.configuration
-        }.from("foo" => "bar").to("foo" => "baz")
       end
     end
 

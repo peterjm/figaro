@@ -15,11 +15,11 @@ module Figaro
     end
 
     def path
-      (@path || default_path).to_s
+      @path.to_s
     end
 
     def environment
-      (@environment || default_environment).to_s
+      @environment.to_s
     end
 
     def configuration
@@ -33,14 +33,6 @@ module Figaro
     end
 
     private
-
-    def default_path
-      raise NotImplementedError
-    end
-
-    def default_environment
-      raise NotImplementedError
-    end
 
     def raw_configuration
       (@parsed ||= Hash.new { |hash, path| hash[path] = parse(path) })[path]

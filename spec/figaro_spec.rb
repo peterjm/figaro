@@ -30,19 +30,32 @@ describe Figaro do
 
     before do
       Figaro.stub(:backend) { backend }
-      backend.stub(:new).with(no_args) { application }
     end
 
     it "defaults to a new backend application" do
+      backend.stub(:new) { application }
       expect(Figaro.application).to eq(application)
     end
 
     it "is configurable" do
+      backend.stub(:new) { application }
       expect {
         Figaro.application = custom_application
       }.to change {
         Figaro.application
       }.from(application).to(custom_application)
+    end
+
+    it "respects the path" do
+      Figaro.path = "the/path"
+      expect(backend).to receive(:new).once.with(hash_including(path: "the/path")) { application }
+      Figaro.application
+    end
+
+    it "respects the environment" do
+      Figaro.environment = "foo"
+      expect(backend).to receive(:new).once.with(hash_including(environment: "foo")) { application }
+      Figaro.application
     end
   end
 
