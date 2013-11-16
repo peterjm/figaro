@@ -70,10 +70,13 @@ module Figaro
       end
 
       it "casts to string" do
-        application = Application.new(environment: ActiveSupport::StringInquirer.new("test"))
+        NotString = Struct.new(:str) do
+          def to_s; str; end
+        end
+        application = Application.new(environment: NotString.new("test"))
 
         expect(application.environment).to eq("test")
-        expect(application.environment).not_to be_an(ActiveSupport::StringInquirer)
+        expect(application.environment).not_to be_an(NotString)
       end
 
       it "follows a changing default" do

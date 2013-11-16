@@ -5,11 +5,11 @@
 [![Coverage Status](https://coveralls.io/repos/laserlemon/figaro/badge.png?branch=master)](https://coveralls.io/r/laserlemon/figaro)
 [![Dependency Status](https://gemnasium.com/laserlemon/figaro.png)](https://gemnasium.com/laserlemon/figaro)
 
-Simple Rails app configuration
+Simple Ruby app configuration
 
 ## What is this for?
 
-Figaro is for configuring Rails (3 and 4) apps, especially open source Rails apps.
+Figaro is for configuring Ruby apps, especially open source Ruby apps.
 
 Open sourcing a Rails app can be a little tricky when it comes to sensitive configuration information like [Pusher](http://pusher.com/) or [Stripe](https://stripe.com/) credentials. You don't want to check private credentials into the repo but what other choice is there?
 
